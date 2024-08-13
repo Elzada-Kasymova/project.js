@@ -1,11 +1,8 @@
-import Post from "./Post.js";
-
+import PostService from "./PostService.js"
 class PostController {
     async create(req, res) {
         try {
-            const { author, title, content, picture } = req.body;
-            const post = await Post.create({ author, title, content, picture });
-            console.log(req.body);
+            const post = await PostService.create(req.body);
             res.json(post);
         } catch (error) {
             console.error(error);
@@ -15,7 +12,7 @@ class PostController {
 
     async getAll(req, res) {
         try {
-            const posts = await Post.find();
+            const posts = await PostService.getAll();
             res.json(posts);
         } catch (error) {
             console.error(error);
@@ -25,14 +22,7 @@ class PostController {
 
     async getOne(req, res) {
         try {
-            const { id } = req.params;
-            if (!id) {
-                return res.status(400).json({ message: 'ID not provided' });
-            }
-            const post = await Post.findById(id);
-            if (!post) {
-                return res.status(404).json({ message: 'Post not found' });
-            }
+            const post = await PostService.getOne(req.params.id);
             res.json(post);
         } catch (error) {
             console.error(error);
@@ -42,41 +32,23 @@ class PostController {
 
     async update(req, res) {
         try {
-            const { id } = req.params; // Get ID from params
-            const updateData = req.body;
-
-            if (!id) {
-                return res.status(400).json({ message: 'ID not provided' });
-            }
-
-            const updatedPost = await Post.findByIdAndUpdate(id, updateData, { new: true });
-            if (!updatedPost) {
-                return res.status(404).json({ message: 'Post not found' });
-            }
-            res.json(updatedPost);
+            const post = await PostService.update(req.body);
+            return res.json(Updatepost);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Failed to update post" });
+            res.status(500).json({ message: "Failed to create post" });
         }
     }
 
     async delete(req, res) {
         try {
-            const { id } = req.params;
-            if (!id) {
-                return res.status(400).json({ message: 'ID not provided' });
-            }
-
-            const deletedPost = await Post.findByIdAndDelete(id);
-            if (!deletedPost) {
-                return res.status(404).json({ message: 'Post not found' });
-            }
-            res.json({ message: 'Post deleted successfully' });
+            const post = await PostService.delete(req.params.id);
+            return res.json(post);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Failed to delete post" });
+            res.status(500).json({ message: "Failed to fetch post" });
         }
-    }
 }
 
+}
 export default new PostController();
