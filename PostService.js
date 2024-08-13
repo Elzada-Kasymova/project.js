@@ -1,14 +1,12 @@
 import Post from "./Post.js";
+import fileService from "./fileService.js";
+
 
 class PostServise {
-    async create(post) {
-        try {
-            const createdPost = await Post.create(post);
+    async create(post,picture) {
+            const fileName = fileService.saveFile(picture);
+            const createdPost = await Post.create({...post, picture:fileName});
             return createdPost;
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Failed to create post" });
-        }
     }
 
     async getAll() {
