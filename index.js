@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import Post from "./Post.js"; // Исправлено: теперь импортируется Post, а не ost
+import Post from "./Post.js";
 
 const PORT = 5001;
 const DB_URL = `mongodb+srv://user:user@project.jke9g.mongodb.net/?retryWrites=true&w=majority&appName=project`;
@@ -22,7 +22,7 @@ app.post('/', async (req, res) => {
 
 async function startApp() {
     try {
-        await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
+        await mongoose.connect(DB_URL); // No options needed
         app.listen(PORT, () => console.log(`SERVER STARTED ON PORT ${PORT}`));
     } catch (e) {
         console.log(e);
